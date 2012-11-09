@@ -1,0 +1,19 @@
+{
+  "name": "nko3-adobe-updater",
+  "version": "0.0.0",
+  "description": "Adobe Updater",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:nko3/adobe-updater.git"
+  },
+  "dependencies": {
+  },
+  "engines": {
+    "node": "0.8.x"
+  },
+  "subdomain": "adobe-updater.nko3"
+}
