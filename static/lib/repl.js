@@ -19,11 +19,16 @@ var replKeyMap = CodeMirror.keyMap.repl = {
             contents = cm.getLine(currentLine);
 
         output = cm.repl.evaluate(contents);
-
         addLines(cm, 2)
 
-        cm.setLine(outputLine, output);
-        cm.setLineClass(outputLine, 'repl_output');
+        if (output instanceof Error) {
+            cm.setLine(outputLine, output.name + ': ' + output.message);
+            cm.setLineClass(outputLine, 'error_output');
+        } else {
+            cm.setLine(outputLine, output);
+            cm.setLineClass(outputLine, 'repl_output');
+        }
+
         cm.setCursor({ line: nextLine, ch: 0 });
 
         myMirror.setMarker(currentLine, '> ', 'old_cursor');
@@ -48,7 +53,11 @@ function Env() {
     var _;
 
     this.eval = function (code) {
-        _ = eval(code);
-        return _.toString();
+        try {
+            _ = eval(code);
+            return _.toString();
+        } catch (e) {
+            return e;
+        }
     }
 }
