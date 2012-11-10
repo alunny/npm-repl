@@ -52,12 +52,23 @@ function addLines(cm, n) {
 function Env() {
     var _;
 
+    function stringify(thing) {
+        if (thing === undefined) {
+            return 'undefined';
+        } else if (thing === null) {
+            return 'null';
+        } else {
+            return thing.toString();
+        }
+    }
+
     this.eval = function (code) {
         try {
             _ = eval(code);
-            return _.toString();
+            return stringify(_);
         } catch (e) {
             return e;
         }
     }
 }
+
