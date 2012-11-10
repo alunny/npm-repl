@@ -31,8 +31,8 @@ var replKeyMap = CodeMirror.keyMap.repl = {
 
         cm.setCursor({ line: nextLine, ch: 0 });
 
-        myMirror.setMarker(currentLine, '> ', 'old_cursor');
-        myMirror.setMarker(nextLine, '> ', 'active_cursor');
+        cm.setMarker(currentLine, '> ', 'old_cursor');
+        cm.setMarker(nextLine, '> ', 'active_cursor');
     }
 }
 

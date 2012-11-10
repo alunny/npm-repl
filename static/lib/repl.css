@@ -1,0 +1,38 @@
+body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+}
+
+.CodeMirror {
+    width: 100%;
+}
+
+.CodeMirror-scroll {
+    height: 100%;
+    min-height: 100%;
+}
+
+div.codemirror {
+    line-height: 1.5em;
+}
+
+.active_cursor {
+    color: blue !important;
+}
+
+.old_cursor {
+    color: gray;
+}
+
+.repl_output {
+    color: darkblue !important;
+    font-weight: bold;
+    margin-left: 12px !important;
+}
+
+.error_output {
+    color: red !important;
+    font-weight: bold;
+    margin-left: 12px !important;
+}

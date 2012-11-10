@@ -1,40 +1,17 @@
 <link rel="stylesheet" href="/lib/codemirror.css"></link>
 
-<style>
-    #repl {
-        border: 1px black solid;
-        width: 50%;
-    }
-
-    div.codemirror {
-        line-height: 1.5em;
-    }
-
-    .active_cursor {
-        color: blue !important;
-    }
-
-    .old_cursor {
-        color: gray;
-    }
-
-    .repl_output {
-        color: darkblue !important;
-        font-weight: bold;
-        margin-left: 12px !important;
-    }
-
-    .error_output {
-        color: red !important;
-        font-weight: bold;
-        margin-left: 12px !important;
-    }
-</style>
-
 <title>repl for {{ module }}</title>
 <h1>repl for {{ module }}</h1>
 
-<div id="repl"></div>
+<iframe src="/iframe/{{ module }}"
+        id="repl"
+        style="border: 1px solid black"
+        frameborder=0
+        width=600
+        height=400>
+</iframe>
+
+<br>
 
 <iframe src="http://nodeknockout.com/iframe/adobe-updater"
     frameborder=0
@@ -43,20 +20,3 @@
     width=115
     height=25>
 </iframe>
-
-<script src="/lib/codemirror.js"></script>
-<script src="/lib/js-mode.js"></script>
-<script src="/lib/repl.js"></script>
-<script src="/js/{{ module }}.js"></script>
-
-<script>
-    var myMirror = CodeMirror(document.getElementById('repl'), {
-            gutter: true,
-            fixedGutter: true,
-            mode: 'javascript',
-            keyMap: 'repl'
-        }),
-        myRepl = new Repl(myMirror);
-
-    myMirror.setMarker(0, '> ', 'active_cursor');
-</script>

@@ -30,6 +30,15 @@ app.route('/repl/:module', function (req, res) {
     page.pipe(res);
 }).methods('GET');
 
+app.route('/iframe/:module', function (req, res) {
+    var page = app.page();
+
+    page.template('iframe.html.mustache')
+    page.results = req.params;
+
+    page.pipe(res);
+}).methods('GET');
+
 app.route('*').files(path.join(__dirname, 'static'));
 
 app.httpServer.listen(8000)
