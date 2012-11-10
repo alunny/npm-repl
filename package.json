@@ -1,6 +1,6 @@
 {
   "name": "nko3-adobe-updater",
-  "version": "0.0.0-1",
+  "version": "0.0.0-2",
   "description": "Adobe Updater",
   "main": "server.js",
   "scripts": {
@@ -12,7 +12,8 @@
   },
   "dependencies": {
     "tako": "~0.3.0",
-    "codemirror": "~2.33.0"
+    "codemirror": "~2.33.0",
+    "browserify": "~1.16.3"
   },
   "engines": {
     "node": "0.8.x"
