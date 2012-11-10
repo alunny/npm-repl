@@ -13,10 +13,14 @@ module.exports = function bundle(mod, cb) {
         fs.writeFileSync(entryPath, 'window.' + mod +
                                         ' = require("' + mod + '");\n');
 
-        b.addEntry(entryPath);
+        try {
+            b.addEntry(entryPath);
 
-        fs.writeFileSync(outputPath, b.bundle());
-        fs.unlinkSync(entryPath);
+            fs.writeFileSync(outputPath, b.bundle());
+            fs.unlinkSync(entryPath);
+        } catch (e) {
+            cb(e);
+        }
 
         process.nextTick(function () {
             cb(null, outputPath);
