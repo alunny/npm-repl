@@ -14,6 +14,7 @@ module.exports = function reallyRequire(module, cb) {
             function installCheck (moduleId) {
                 if (moduleId == module) {
                     console.log('installer has installed ' + module);
+                    process.nextTick(cb);
                     Installer.removeListener('installed', installCheck);
                 }
             }
