@@ -1,22 +1,41 @@
-<link rel="stylesheet" href="/lib/codemirror.css"></link>
+<link rel="stylesheet" href="/lib/1140.css"></link>
+<link rel="stylesheet" href="/lib/npmrepl.css"></link>
 
-<title>repl for {{ module }}</title>
-<h1>repl for {{ module }}</h1>
+<title>{{ module }} @ npm-repl</title>
 
-<iframe src="/iframe/{{ module }}"
-        id="repl"
-        style="border: 1px solid black"
-        frameborder=0
-        width=600
-        height=400>
-</iframe>
+<div class="container">
+    <div class="row">
+        <div class="fourcol">
+            <h1>{{ module }}</h1>
+        </div>
 
-<br>
+        <div class="fivecol"></div>
 
-<iframe src="http://nodeknockout.com/iframe/adobe-updater"
-    frameborder=0
-    scrolling=no
-    allowtransparency=true
-    width=115
-    height=25>
-</iframe>
+        <div class="twocol">
+            <iframe src="http://nodeknockout.com/iframe/adobe-updater"
+                frameborder=0
+                scrolling=no
+                allowtransparency=true
+                width=115
+                height=25>
+            </iframe>
+        </div>
+    </div>
+
+    <div class="row">
+
+        <div class="fivecol" id="repl_div">
+            <iframe src="/iframe/{{ module }}"
+                    id="repl"
+                    style="border: 1px solid black"
+                    frameborder=0
+                    width=550
+                    height=400>
+            </iframe>
+        </div>
+
+    </div>
+</div>
+
+
+<script src="http://use.edgefonts.net/amaranth.js"></script>

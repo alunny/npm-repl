@@ -6,6 +6,7 @@ body {
 
 .CodeMirror {
     width: 100%;
+    background: white;
 }
 
 .CodeMirror-scroll {
