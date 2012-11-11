@@ -58,7 +58,7 @@ function Env() {
         } else if (thing === null) {
             return 'null';
         } else {
-            return thing.toString();
+            return JSON.stringify(thing);
         }
     }
 
