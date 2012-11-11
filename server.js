@@ -12,14 +12,19 @@ templates.directory(path.join(__dirname, 'templates'));
 app.route('/').files(path.join(__dirname, 'static', 'index.html'));
 
 app.route('/js/:module.js', function (req, res) {
-    bundle(req.params.module, function (err, outputPath) {
-        if (err) {
-            return fiveHundred(err, res);
-        }
+    if (req.params.module == 'hoarders') {
+        res.writeHead(400, {'Content-Type': 'text/plain'});
+        res.end('lol no way bro');
+    } else {
+        bundle(req.params.module, function (err, outputPath) {
+            if (err) {
+                return fiveHundred(err, res);
+            }
 
-        res.writeHead(200, {'Content-Type': 'text/javascript'});
-        fs.createReadStream(outputPath).pipe(res);
-    });
+            res.writeHead(200, {'Content-Type': 'text/javascript'});
+            fs.createReadStream(outputPath).pipe(res);
+        });
+    };
 }).methods('GET');
 
 app.route('/repl/:module', function (req, res) {
@@ -41,19 +46,24 @@ app.route('/iframe/:module', function (req, res) {
 }).methods('GET');
 
 app.route('/readme/:module', function (req, res) {
-    package(req.params.module, function (err, package) {
-        if (err) {
-            return fiveHundred(err, res);
-        }
+    if (req.params.module == 'hoarders') {
+        res.writeHead(400, {'Content-Type': 'text/plain'});
+        res.end('lol no way bro');
+    } else {
+        package(req.params.module, function (err, package) {
+            if (err) {
+                return fiveHundred(err, res);
+            }
 
-        if (!package.readme) {
-            res.writeHead(404, {'Content-Type': 'text/plain'});
-            res.end('No README found');
-        } else {
-            res.writeHead(200, {'Content-Type': 'text/plain'});
-            res.end(marked(package.readme));
-        }
-    });
+            if (!package.readme) {
+                res.writeHead(404, {'Content-Type': 'text/plain'});
+                res.end('No README found');
+            } else {
+                res.writeHead(200, {'Content-Type': 'text/plain'});
+                res.end(marked(package.readme));
+            }
+        });
+    }
 })
 
 app.route('*').files(path.join(__dirname, 'static'));
