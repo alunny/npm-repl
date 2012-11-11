@@ -3,6 +3,7 @@ var app = require('tako')(),
     fs = require('fs'),
     marked = require('marked'),
     bundle = require('./bundle'),
+    package = require('./packageReader'),
     templates = app.templates,
     pages = {};
 
@@ -13,8 +14,7 @@ app.route('/').files(path.join(__dirname, 'static', 'index.html'));
 app.route('/js/:module.js', function (req, res) {
     bundle(req.params.module, function (err, outputPath) {
         if (err) {
-            res.writeHead(500, {'Content-Type': 'text/plain'});
-            return res.end(err.message);
+            return fiveHundred(err, res);
         }
 
         res.writeHead(200, {'Content-Type': 'text/javascript'});
@@ -41,12 +41,26 @@ app.route('/iframe/:module', function (req, res) {
 }).methods('GET');
 
 app.route('/readme/:module', function (req, res) {
-    // todo: get the actual README
-    var mkdPath = path.join(__dirname, 'static', 'mapletree-readme.mkd');
-    var readme = fs.readFileSync(mkdPath, 'utf-8');
+    package(req.params.module, function (err, package) {
+        var markdownish = /[.]mk?d$/;
 
-    res.writeHead(200, {'Content-Type': 'text/plain'});
-    res.end(marked(readme));
+        if (err) {
+            return fiveHundred(err, res);
+        }
+
+        if (!package.readme) {
+            res.writeHead(404, {'Content-Type': 'text/plain'});
+            res.end('No README found');
+        } else {
+            res.writeHead(200, {'Content-Type': 'text/plain'});
+
+            if (markdownish.test(package.readmeFilename)) {
+                res.end(marked(package.readme));
+            } else {
+                res.end(package.readme);
+            }
+        }
+    });
 })
 
 app.route('*').files(path.join(__dirname, 'static'));
@@ -54,3 +68,8 @@ app.route('*').files(path.join(__dirname, 'static'));
 app.httpServer.listen(8000)
 
 console.log('Server running at http://0.0.0.0:8000/');
+
+function fiveHundred(err, res) {
+    res.writeHead(500, {'Content-Type': 'text/plain'});
+    return res.end(err.message);
+}
