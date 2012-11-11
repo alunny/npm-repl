@@ -1,9 +1,14 @@
-var reallyRequire = require('./brute-require');
+var request = require('request')
 
 module.exports = function package(module, callback) {
-    reallyRequire(module, function (err) {
+    request('https://registry.npmjs.org/' + module, function (err, res) {
         if (err) { callback(err); }
 
-        callback(null, require(module + '/package'));
+        console.log('response size is ' + res.body.length);
+
+        var pkg = JSON.parse(res.body),
+            latestVersion = pkg['dist-tags'].latest;
+
+        callback(null, pkg.versions[latestVersion]);
     });
 }

@@ -46,24 +46,19 @@ app.route('/iframe/:module', function (req, res) {
 }).methods('GET');
 
 app.route('/readme/:module', function (req, res) {
-    if (req.params.module == 'hoarders') {
-        res.writeHead(400, {'Content-Type': 'text/plain'});
-        res.end('lol no way bro');
-    } else {
-        package(req.params.module, function (err, package) {
-            if (err) {
-                return fiveHundred(err, res);
-            }
+    package(req.params.module, function (err, package) {
+        if (err) {
+            return fiveHundred(err, res);
+        }
 
-            if (!package.readme) {
-                res.writeHead(404, {'Content-Type': 'text/plain'});
-                res.end('No README found');
-            } else {
-                res.writeHead(200, {'Content-Type': 'text/plain'});
-                res.end(marked(package.readme));
-            }
-        });
-    }
+        if (!package.readme) {
+            res.writeHead(404, {'Content-Type': 'text/plain'});
+            res.end('No README found');
+        } else {
+            res.writeHead(200, {'Content-Type': 'text/plain'});
+            res.end(marked(package.readme));
+        }
+    });
 })
 
 app.route('*').files(path.join(__dirname, 'static'));
