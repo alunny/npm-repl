@@ -19,7 +19,9 @@ var replKeyMap = CodeMirror.keyMap.repl = {
         var repl = cm.repl,
             currentLine = cm.getCursor().line,
             outputLine = currentLine + 1,
-            nextLine = outputLine + 1,
+            output,
+            outputLineCount,
+            nextLine,
             contents = cm.getLine(currentLine);
 
         if (repl.entryNumber == (repl.history.length - 1)) {
@@ -29,7 +31,9 @@ var replKeyMap = CodeMirror.keyMap.repl = {
         }
 
         output = repl.evaluate(contents);
-        addLines(cm, 2)
+        outputLineCount = output.split('\n').length;
+        nextLine = outputLine + outputLineCount;
+        addLines(cm, outputLineCount + 1)
 
         if (output instanceof Error) {
             cm.setLine(outputLine, output.name + ': ' + output.message);
