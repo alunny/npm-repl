@@ -6,7 +6,9 @@ var fs = require('fs'),
 
 module.exports = function bundle(mod, cb) {
     reallyRequire(mod, function (err) {
-        if (err) { return cb(err) };
+        if (err) {
+            return cb(err)
+        };
 
         var entryPath = path.join(__dirname, 'entry.js'),
             outputPath = path.join(__dirname, mod + '-output.js'),
@@ -20,13 +22,13 @@ module.exports = function bundle(mod, cb) {
 
             fs.writeFileSync(outputPath, b.bundle());
             fs.unlinkSync(entryPath);
+
+            process.nextTick(function () {
+                cb(null, outputPath);
+            });
         } catch (e) {
             cb(e);
+            fs.unlinkSync(entryPath);
         }
-
-        process.nextTick(function () {
-            cb(null, outputPath);
-        });
-
     });
 }
