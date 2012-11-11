@@ -54,7 +54,34 @@ var replKeyMap = CodeMirror.keyMap.repl = {
     'Up':       historyBack,
     'Ctrl-P':   historyBack,
     'Down':     historyForward,
-    'Ctrl-N':   historyForward
+    'Ctrl-N':   historyForward,
+    'Left':     cursorBack,
+    'Ctrl-B':   cursorBack,
+    'Right':    cursorForward,
+    'Ctrl-F':   cursorForward
+}
+
+function cursorBack(cm) {
+    var cursorAt = cm.getCursor();
+
+    if (cursorAt.ch > 0) {
+        cm.setCursor({
+            line: cursorAt.line,
+            ch: cursorAt.ch - 1
+        });
+    }
+}
+
+function cursorForward(cm) {
+    var cursorAt = cm.getCursor(),
+        contents = cm.getLine(cursorAt.line);
+
+    if (cursorAt.ch < (contents.length)) {
+        cm.setCursor({
+            line: cursorAt.line,
+            ch: cursorAt.ch + 1
+        });
+    }
 }
 
 function historyBack(cm) {
