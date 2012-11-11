@@ -54,3 +54,11 @@ pre, code {
 #embed_code {
     margin-left: 25px;
 }
+
+a {
+    color: #48A767;
+}
+
+#nko-iframe {
+    margin-left: 10%;
+}

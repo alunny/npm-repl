@@ -1,12 +1,12 @@
 body {
+    background: white;
+    height: 100%;
     margin: 0;
     padding: 0;
-    height: 100%;
 }
 
 .CodeMirror {
     width: 100%;
-    background: white;
     line-height: 1.5em;
 }
 
@@ -33,4 +33,14 @@ body {
     color: red !important;
     font-weight: bold;
     margin-left: 12px !important;
+}
+
+.CodeMirror pre {
+    font-family: inconsolata, serif;
+}
+
+#repl-header {
+    font-family: inconsolata, serif;
+    line-height: 1.5em;
+    padding: 0 2.5em;
 }
