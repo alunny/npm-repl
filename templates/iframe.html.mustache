@@ -7,13 +7,41 @@
 
     <body>
 
+        <!--
         <div id="repl-header">{{ module }} = require('{{ module }}')</div>
+        -->
+
+        <div id="repl-header">loading {{ module }}</div>
 
         <script src="http://use.edgefonts.net/inconsolata.js"></script>
         <script src="/lib/codemirror.js"></script>
         <script src="/lib/js-mode.js"></script>
         <script src="/lib/repl.js"></script>
-        <script src="/js/{{ module }}.js"></script>
         <script src="/lib/npmRepl.js"></script>
+        <script>
+
+        document.addEventListener('DOMContentLoaded', function () {
+            var header = document.getElementById('repl-header'),
+                req = new XMLHttpRequest();
+            req.open('GET', '/js/{{ module }}.js', true);
+
+            req.onreadystatechange = function (evt) {
+                if (req.readyState === 4) {
+                    if (req.status === 200) {
+                        var s = document.createElement('script');
+                        s.innerHTML = req.responseText;
+
+                        header.innerHTML = "{{ module }} = require('{{ module }}')";
+                        document.body.appendChild(s);
+                    } else {
+                        header.innerHTML = 'Error: ' + req.responseText
+                        header.setAttribute('class', 'load_error');
+                    }
+                }
+            }
+
+            req.send();
+        }, false);
+        </script>
     </body>
 </html>
