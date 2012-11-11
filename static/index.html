@@ -1,55 +1,63 @@
-<link rel="stylesheet" href="../lib/codemirror.css"></link>
+<link rel="stylesheet" href="/lib/1140.css"></link>
+<link rel="stylesheet" href="/lib/npmrepl.css"></link>
 
-<style>
-    #repl {
-        border: 1px black solid;
-        width: 50%;
-    }
+<title>npm REPL - try node modules, right in your browser</title>
 
-    div.codemirror {
-        line-height: 1.5em;
-    }
+<div class="container landing">
+    <div class="row">
+        <div class="sevencol">
+            <h1>npm REPL</h1>
 
-    .active_cursor {
-        color: blue !important;
-    }
+            <h2>try node modules, right in your browser</h2>
 
-    .old_cursor {
-        color: gray;
-    }
+            <p>
+                <b>npm REPL</b> allows you to try any <a href="http://npmjs.org">npm</a>
+                module[1] without running the laborious and time-consuming process of
+                installing it into your own app[2].
+            </p>
 
-    .repl_output {
-        color: darkblue !important;
-        font-weight: bold;
-        margin-left: 12px !important;
-    }
+            <p>
+                Here are a few samples that work okay, some of the time:<br>
+                <ul>
+                    <li><a href="/repl/marked">Marked</a> &mdash; a markdown parser</li>
+                    <li><a href="/repl/mapleTree">mapleTree</a> &mdash; a router</li>
+                </ul>
+            </p>
+        </div>
 
-    .error_output {
-        color: red !important;
-        font-weight: bold;
-        margin-left: 12px !important;
-    }
-</style>
+        <div class="onecol"></div>
 
-<title>Code Mirror repl</title>
+        <div class="threecol">
+            <iframe src="http://nodeknockout.com/iframe/adobe-updater"
+                id="nko-iframe"
+                frameborder=0
+                scrolling=no
+                allowtransparency=true
+                width=115
+                height=25>
+            </iframe>
 
-<div id="repl"></div>
+            <br>
 
-<iframe src="http://nodeknockout.com/iframe/adobe-updater" frameborder=0 scrolling=no allowtransparency=true width=115 height=25>
-</iframe>
+            <p>
+                <a href="/">npm-repl</a>, by
+                <a href="https://twitter.com/alunny">alunny</a>
+            </p>
+        </div>
+    </div>
 
-<script src="/lib/codemirror.js"></script>
-<script src="/lib/js-mode.js"></script>
-<script src="/lib/repl.js"></script>
+    <div class="row">
+        <div class="tencol">
+            <h6>
+                [1]: not really, a bunch of them won't work. Many of them will, in fact,
+                crash this entire site<br>
+                [2]: disclaimer: npm is neither laborious nor time-consuming. Except maybe
+                if you're isaacs
+            </h6>
+        </div>
+    </div>
+</div>
 
-<script>
-    var myMirror = CodeMirror(document.getElementById('repl'), {
-            gutter: true,
-            fixedGutter: true,
-            mode: 'javascript',
-            keyMap: 'repl'
-        }),
-        myRepl = new Repl(myMirror);
-
-        myMirror.setMarker(0, '> ', 'active_cursor');
-</script>
+<script src="http://use.edgefonts.net/amaranth.js"></script>
+<script src="http://use.edgefonts.net/pt-serif.js"></script>
+<script src="http://use.edgefonts.net/inconsolata.js"></script>
