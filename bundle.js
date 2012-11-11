@@ -38,6 +38,10 @@ module.exports = function bundle(mod, cb) {
                     cb(null, outputPath);
                 });
             } catch (e) {
+                if (e.message.match(' from dir')) {
+                    e.message = e.message.split(' from dir')[0];
+                }
+
                 cb(e);
                 fs.unlinkSync(entryPath);
             }

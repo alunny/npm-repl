@@ -1,6 +1,6 @@
 {
   "name": "nko3-adobe-updater",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Embedabble browser REPLs for NPM modules",
   "main": "server.js",
   "scripts": {
