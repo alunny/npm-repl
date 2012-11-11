@@ -57,6 +57,8 @@ function Env() {
             return 'undefined';
         } else if (thing === null) {
             return 'null';
+        } else if (typeof thing == 'function') {
+            return thing.toString();
         } else {
             return JSON.stringify(thing);
         }
