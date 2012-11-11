@@ -6,26 +6,33 @@ var app = require('tako')(),
     package = require('./packageReader'),
     templates = app.templates,
     tmpdir = process.env['TMPDIR'],
-    pages = {};
+    failures = {};
 
 templates.directory(path.join(__dirname, 'templates'));
 
 app.route('/').files(path.join(__dirname, 'static', 'index.html'));
 
 app.route('/js/:module.js', function (req, res) {
-    var cachedPath = path.join(tmpdir, module + '.js');
+    var mod = req.params.module,
+        cachedPath = path.join(tmpdir, mod + '.js');
 
     if (fs.existsSync(cachedPath)) {
-        console.log('reading ' + module + ' from tmpdir');
+        console.log('reading ' + mod + ' from tmpdir');
 
         res.writeHead(200, {'Content-Type': 'text/javascript'});
         fs.createReadStream(cachedPath).pipe(res);
-    } else if (req.params.module == 'hoarders') {
+    } else if (failures[mod]) {
+        console.log('reading ' + mod + ' error from cache');
+
+        res.writeHead(500, {'Content-Type': 'text/plain'});
+        res.end(failures[mod]);
+    } else if (mod == 'hoarders') {
         res.writeHead(400, {'Content-Type': 'text/plain'});
         res.end('lol no way bro');
     } else {
-        bundle(req.params.module, function (err, outputPath) {
+        bundle(mod, function (err, outputPath) {
             if (err) {
+                failures[mod] = err.message;
                 return fiveHundred(err, res);
             }
 
@@ -57,19 +64,37 @@ app.route('/iframe/:module', function (req, res) {
 }).methods('GET');
 
 app.route('/readme/:module', function (req, res) {
-    package(req.params.module, function (err, package) {
-        if (err) {
-            return fiveHundred(err, res);
-        }
+    var mod = req.params.module,
+        cachedPath = path.join(tmpdir, mod + '.html');
 
-        if (!package.readme) {
-            res.writeHead(404, {'Content-Type': 'text/plain'});
-            res.end('No README found');
-        } else {
-            res.writeHead(200, {'Content-Type': 'text/plain'});
-            res.end(marked(package.readme));
-        }
-    });
+    if (fs.existsSync(cachedPath)) {
+        console.log('reading ' + mod + ' readme from tmpdir');
+
+        res.writeHead(200, {'Content-Type': 'text/javascript'});
+        fs.createReadStream(cachedPath).pipe(res);
+    } else {
+        package(mod, function (err, package) {
+            var readme;
+
+            if (err) {
+                return fiveHundred(err, res);
+            }
+
+            if (!package.readme) {
+                res.writeHead(404, {'Content-Type': 'text/plain'});
+                res.end('No README found');
+            } else {
+                readme = marked(package.readme);
+
+                res.writeHead(200, {'Content-Type': 'text/plain'});
+                res.end(readme);
+
+                fs.writeFile(cachedPath, readme, function (err) {
+                    if (err) { console.log(err); }
+                });
+            }
+        });
+    };
 })
 
 app.route('*').files(path.join(__dirname, 'static'));
