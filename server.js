@@ -42,8 +42,6 @@ app.route('/iframe/:module', function (req, res) {
 
 app.route('/readme/:module', function (req, res) {
     package(req.params.module, function (err, package) {
-        var markdownish = /[.]mk?d$/;
-
         if (err) {
             return fiveHundred(err, res);
         }
@@ -53,12 +51,7 @@ app.route('/readme/:module', function (req, res) {
             res.end('No README found');
         } else {
             res.writeHead(200, {'Content-Type': 'text/plain'});
-
-            if (markdownish.test(package.readmeFilename)) {
-                res.end(marked(package.readme));
-            } else {
-                res.end(package.readme);
-            }
+            res.end(marked(package.readme));
         }
     });
 })
