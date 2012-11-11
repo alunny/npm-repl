@@ -1,4 +1,4 @@
-var npm = require('npm');
+var Installer = require('./installer')();
 
 module.exports = function reallyRequire(module, cb) {
     // first off - resolve dependency
@@ -8,18 +8,19 @@ module.exports = function reallyRequire(module, cb) {
     } catch (e) {
         console.log(module + ' not installed')
 
-        npm.load({ loglevel: 'silent' }, function (err) {
-            if (err) {
-                throw err
+        if (Installer.isInstalling(module)) {
+            console.log('wait for installer');
+
+            function installCheck (moduleId) {
+                if (moduleId == module) {
+                    console.log('installer has installed ' + module);
+                    Installer.removeListener('installed', installCheck);
+                }
             }
 
-            npm.commands.install([module], function (err, data) {
-                if (err) {
-                    throw err;
-                }
-
-                process.nextTick(cb);
-            });
-        })
+            Installer.on('installed', installCheck);
+        } else {
+            Installer.install(module, cb);
+        }
     }
 }
