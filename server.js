@@ -5,6 +5,7 @@ var app = require('tako')(),
     bundle = require('./bundle'),
     package = require('./packageReader'),
     templates = app.templates,
+    tmpdir = process.env['TMPDIR'],
     pages = {};
 
 templates.directory(path.join(__dirname, 'templates'));
@@ -12,7 +13,14 @@ templates.directory(path.join(__dirname, 'templates'));
 app.route('/').files(path.join(__dirname, 'static', 'index.html'));
 
 app.route('/js/:module.js', function (req, res) {
-    if (req.params.module == 'hoarders') {
+    var cachedPath = path.join(tmpdir, module + '.js');
+
+    if (fs.existsSync(cachedPath)) {
+        console.log('reading ' + module + ' from tmpdir');
+
+        res.writeHead(200, {'Content-Type': 'text/javascript'});
+        fs.createReadStream(cachedPath).pipe(res);
+    } else if (req.params.module == 'hoarders') {
         res.writeHead(400, {'Content-Type': 'text/plain'});
         res.end('lol no way bro');
     } else {
@@ -23,6 +31,9 @@ app.route('/js/:module.js', function (req, res) {
 
             res.writeHead(200, {'Content-Type': 'text/javascript'});
             fs.createReadStream(outputPath).pipe(res);
+
+            fs.createReadStream(outputPath)
+                .pipe(fs.createWriteStream(cachedPath));
         });
     };
 }).methods('GET');
