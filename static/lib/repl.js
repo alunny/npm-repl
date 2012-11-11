@@ -4,6 +4,9 @@ function Repl(editor) {
     this.environment = new Env;
 
     this.editor.repl = this;
+    this.history = [];
+    this.entryNumber = 0;
+    this.historyIndex = -1;
 }
 
 Repl.prototype.evaluate = function (input) {
@@ -13,12 +16,19 @@ Repl.prototype.evaluate = function (input) {
 var replKeyMap = CodeMirror.keyMap.repl = {
     'Enter': function (cm) {
         // evaluate current line in env, print output
-        var currentLine = cm.getCursor().line,
+        var repl = cm.repl,
+            currentLine = cm.getCursor().line,
             outputLine = currentLine + 1,
             nextLine = outputLine + 1,
             contents = cm.getLine(currentLine);
 
-        output = cm.repl.evaluate(contents);
+        if (repl.entryNumber == (repl.history.length - 1)) {
+            repl.history[repl.entryNumber] = contents;
+        } else {
+            repl.history.push(contents);
+        }
+
+        output = repl.evaluate(contents);
         addLines(cm, 2)
 
         if (output instanceof Error) {
@@ -33,6 +43,42 @@ var replKeyMap = CodeMirror.keyMap.repl = {
 
         cm.setMarker(currentLine, '> ', 'old_cursor');
         cm.setMarker(nextLine, '> ', 'active_cursor');
+
+        repl.entryNumber += 1;
+        repl.historyIndex = -1;
+    },
+    'Up':       historyBack,
+    'Ctrl-P':   historyBack,
+    'Down':     historyForward,
+    'Ctrl-N':   historyForward
+}
+
+function historyBack(cm) {
+    var currentLine = cm.getCursor().line,
+        repl = cm.repl,
+        historyIndex;
+
+    if (repl.entryNumber > 0 && repl.historyIndex != 0) {
+        if (repl.historyIndex > 0) {
+            historyIndex = repl.historyIndex -= 1;
+        } else {
+            // save contents of current line
+            repl.history.push(cm.getLine(currentLine));
+            historyIndex = repl.historyIndex = repl.entryNumber - 1;
+        }
+
+        cm.setLine(currentLine, repl.history[historyIndex])
+    }
+}
+
+function historyForward(cm) {
+    var currentLine = cm.getCursor().line,
+        repl = cm.repl,
+        historyIndex;
+
+    if (repl.entryNumber > 0 && repl.historyIndex < repl.history.length - 1) {
+        historyIndex = repl.historyIndex += 1;
+        cm.setLine(currentLine, repl.history[historyIndex])
     }
 }
 
@@ -73,4 +119,3 @@ function Env() {
         }
     }
 }
-
