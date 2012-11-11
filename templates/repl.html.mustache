@@ -32,6 +32,27 @@
                     width=550
                     height=400>
             </iframe>
+
+            <br>
+
+            <h2>Embed this REPL:</h2><br>
+
+            <pre id="embed_code">
+&lt;iframe src="http://adobe-updater.nko3.jit.su/iframe/{{ module }}"
+        id="repl"
+        style="border: 1px solid black"
+        frameborder=0
+        width=550
+        height=400&gt;
+&lt;/iframe&gt; </pre>
+        </div>
+
+        <div class="onecol"></div>
+
+        <div class="fivecol">
+            <article id="readme">
+                loading README
+            </article>
         </div>
 
     </div>
@@ -39,3 +60,24 @@
 
 
 <script src="http://use.edgefonts.net/amaranth.js"></script>
+<script src="http://use.edgefonts.net/pt-serif.js"></script>
+<script src="http://use.edgefonts.net/inconsolata.js"></script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var req = new XMLHttpRequest();
+        req.open('GET', '/readme/{{ module }}', true);
+
+        req.onreadystatechange = function (evt) {
+            if (req.readyState === 4) {
+                if (req.status === 200) {
+                    document.getElementById('readme').innerHTML = req.responseText;
+                } else {
+                    console.log("Error", req);
+                }
+            }
+        }
+
+        req.send();
+    }, false);
+</script>

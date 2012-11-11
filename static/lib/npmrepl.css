@@ -1,12 +1,20 @@
 body {
     background: #F3FFEA;
     color: #010C04;
+    font-family: pt-serif, serif;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-family: amaranth, serif;
 }
 
 h1 {
     color: #3A704C;
-    font-family: amaranth, serif;
     font-size: 3em;
+}
+
+h2, h3, h4, h5, h6 {
+    color: #010C04;
 }
 
 .container {
@@ -15,4 +23,34 @@ h1 {
 
 .row {
     padding-bottom: 20px;
+}
+
+/* so fucking terrible */
+article#readme h1 {
+    display: none;
+}
+
+article#readme h2, article#readme h3, article#readme h4,
+article#readme h5, article#readme h6 {
+    margin: 10px 5px;
+}
+
+#repl_div h2 {
+    margin-top: 30px;
+}
+
+pre {
+    background: #DFDEC3;
+    border: 1px solid black;
+    padding: 10px;
+    margin: 5px;
+    overflow: scroll;
+}
+
+pre, code {
+    font-family: inconsolata, serif;
+}
+
+#embed_code {
+    margin-left: 25px;
 }

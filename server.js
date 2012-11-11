@@ -1,6 +1,7 @@
 var app = require('tako')(),
     path = require('path'),
     fs = require('fs'),
+    marked = require('marked'),
     bundle = require('./bundle'),
     templates = app.templates,
     pages = {};
@@ -38,6 +39,15 @@ app.route('/iframe/:module', function (req, res) {
 
     page.pipe(res);
 }).methods('GET');
+
+app.route('/readme/:module', function (req, res) {
+    // todo: get the actual README
+    var mkdPath = path.join(__dirname, 'static', 'mapletree-readme.mkd');
+    var readme = fs.readFileSync(mkdPath, 'utf-8');
+
+    res.writeHead(200, {'Content-Type': 'text/plain'});
+    res.end(marked(readme));
+})
 
 app.route('*').files(path.join(__dirname, 'static'));
 
